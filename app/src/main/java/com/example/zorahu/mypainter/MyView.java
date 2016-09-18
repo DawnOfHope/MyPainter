@@ -46,6 +46,17 @@ public class MyView extends View {
 
         gd = new GestureDetector(context, new MyGDListener());
     }
+    private class MyGDListener extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onDown(MotionEvent e){
+            return true;
+        }
+        @Override
+        public boolean onFling(MotionEvent e1,MotionEvent e2,float velocityX,float velocityY){
+            Log.d("test","onFling:" + velocityX + "x" + velocityY + "Y");
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+    }
 
     Timer getTimer(){return timer;}
 
@@ -93,6 +104,22 @@ public class MyView extends View {
             }
         }
     }
+    private class RefresView extends TimerTask{
+        @Override
+        public void run(){
+            postInvalidate();
+        }
+    }
+
+    private class BallTask extends TimerTask{
+        @Override
+        public void run(){
+            if (ballX<0 || ballX + ballW > viewW)dx *= -1;
+            if (ballY<0 || ballY + ballH > viewH)dy *= -1;
+            ballX += dx;
+            ballY += dy;
+        }
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
@@ -124,34 +151,11 @@ public class MyView extends View {
         invalidate();
     }
 
-    private class MyGDListener extends GestureDetector.SimpleOnGestureListener{
-        @Override
-        public boolean onDown(MotionEvent e){
-            return true;
-        }
-        @Override
-        public boolean onFling(MotionEvent e1,MotionEvent e2,float velocityX,float velocityY){
-            Log.d("test","onFling:" + velocityX + "x" + velocityY + "Y");
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-    }
 
-    private class RefresView extends TimerTask{
-        @Override
-        public void run(){
-            postInvalidate();
-        }
-    }
 
-    private class BallTask extends TimerTask{
-        @Override
-        public void run(){
-            if (ballX<0 || ballX + ballW > viewW)dx *= -1;
-            if (ballY<0 || ballY + ballH > viewH)dy *= -1;
-            ballX += dx;
-            ballY += dy;
-        }
-    }
+
+
+
 
 
 
